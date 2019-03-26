@@ -1,0 +1,13 @@
+spring:
+  jpa:
+    database: MYSQL
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      use-new-id-generator-mappings: true
+  datasource:
+    username: root
+    password: password
+    url: jdbc:mysql://localhost:3306/dataservice
+    driver-class-name: com.mysql.jdbc.Driver
