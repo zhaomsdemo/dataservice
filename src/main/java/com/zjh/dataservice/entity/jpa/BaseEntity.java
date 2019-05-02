@@ -1,4 +1,4 @@
-package com.zjh.dataservice.entity;
+package com.zjh.dataservice.entity.jpa;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;

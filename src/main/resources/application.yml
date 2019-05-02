@@ -12,3 +12,9 @@ spring:
     password: password
     url: jdbc:mysql://localhost:3306/dataservice?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     driver-class-name: org.mariadb.jdbc.Driver
+  data:
+    cassandra:
+      keyspace-name: ks_person
+      contact-points: 192.168.0.10
+      port: 9042
+      schema-action: RECREATE

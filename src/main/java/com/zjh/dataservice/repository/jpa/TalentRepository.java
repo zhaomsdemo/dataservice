@@ -1,6 +1,6 @@
-package com.zjh.dataservice.repository;
+package com.zjh.dataservice.repository.jpa;
 
-import com.zjh.dataservice.entity.Talent;
+import com.zjh.dataservice.entity.jpa.Talent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
