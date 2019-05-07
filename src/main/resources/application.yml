@@ -18,3 +18,5 @@ spring:
       contact-points: 192.168.0.10
       port: 9042
       schema-action: RECREATE
+    solr:
+      host: http://192.168.0.30:8983/solr
