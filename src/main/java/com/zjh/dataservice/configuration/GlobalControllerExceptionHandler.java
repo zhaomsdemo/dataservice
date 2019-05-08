@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.validation.ConstraintViolationException;
+
 @ControllerAdvice
 public class GlobalControllerExceptionHandler {
 
@@ -17,6 +19,16 @@ public class GlobalControllerExceptionHandler {
     public ErrorResponse handleNotFoundException(){
         return ErrorResponse.builder()
                 .code(-1).status(HttpStatus.NOT_FOUND.value()).message("Data not found")
+                .build();
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseBody
+    public ErrorResponse handleBadRequest(){
+        return ErrorResponse.builder()
+                .code(-2).status(HttpStatus.BAD_REQUEST.value())
+                .message("Bad request")
                 .build();
     }
 }

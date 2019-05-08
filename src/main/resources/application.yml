@@ -5,7 +5,7 @@ spring:
 #    generate-ddl: true
     show-sql: true
     hibernate:
-      ddl-auto: 'create-drop'
+      ddl-auto: 'update'
       use-new-id-generator-mappings: true
   datasource:
     username: root
@@ -17,6 +17,6 @@ spring:
       keyspace-name: ks_person
       contact-points: 192.168.0.10
       port: 9042
-      schema-action: RECREATE
+      schema-action: CREATE_IF_NOT_EXISTS
     solr:
       host: http://192.168.0.30:8983/solr
