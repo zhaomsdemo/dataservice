@@ -17,6 +17,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+    mavenLocal()
 }
 
 ext {
@@ -24,6 +25,9 @@ ext {
 }
 
 dependencies {
+	compile 'net.spy:spymemcached:2.12.3'
+	compile 'com.btmatthews.springboot:memcached-spring-boot-starter:1.1.0'
+
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
@@ -47,6 +51,11 @@ dependencies {
 //	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	testCompile('info.cukes:cucumber-java8:1.2.4')
+	testCompile('info.cukes:cucumber-junit:1.2.4')
+	testCompile('info.cukes:cucumber-spring:1.2.4')
+
 }
 
 dependencyManagement {

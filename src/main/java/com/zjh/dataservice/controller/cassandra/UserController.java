@@ -1,9 +1,12 @@
 package com.zjh.dataservice.controller.cassandra;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zjh.dataservice.configuration.Constants;
 import com.zjh.dataservice.entity.cassandra.User;
 import com.zjh.dataservice.exception.DataNotFoundException;
 import com.zjh.dataservice.service.cassandra.UserService;
+import net.spy.memcached.MemcachedClient;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
@@ -32,18 +35,29 @@ public class UserController {
     @Autowired
     private SolrClient solrClient;
 
+    @Autowired
+    private MemcachedClient memcachedClient;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @PostMapping("/create")
     public ResponseEntity<User> postUser(@RequestBody User user) throws IOException, SolrServerException {
         User response = userService.saveUser(user);
         ResponseEntity<User> responseEntity = new ResponseEntity<User>(user, HttpStatus.OK);
 
-        saveToSolr(user);
+//        saveToSolr(user);
+        saveToMemcached(user);
         return responseEntity;
     }
 
     @GetMapping("/get/{uuid}")
     public ResponseEntity<User> getUser(@Pattern(regexp = Constants.REGEX_UUID) @PathVariable String uuid) throws DataNotFoundException {
-        User user = userService.findByUserId(uuid);
+        User user = getUserFromMemcached(uuid);
+        if(user == null ){
+            user = userService.findByUserId(uuid);
+            saveToMemcached(user);
+        }
         ResponseEntity<User> responseEntity = new ResponseEntity<User>(user, HttpStatus.OK);
         return responseEntity;
     }
@@ -56,5 +70,22 @@ public class UserController {
 
         solrClient.add("demo", document);
         solrClient.commit("demo");
+    }
+
+    private void saveToMemcached(User user){
+        memcachedClient.add(user.getUserId(), 60000, user);
+    }
+
+    private User getUserFromMemcached(String key){
+        Object object = memcachedClient.get(key);
+        if(object == null){
+            return null;
+        }
+        return convertObjectToUser(object);
+    }
+
+    private User convertObjectToUser(Object object){
+        User user = objectMapper.convertValue(object, User.class);
+        return user;
     }
 }
